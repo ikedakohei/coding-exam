@@ -1,10 +1,10 @@
+import db from '@/database/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import db from "@/database/db";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
-      db.all("SELECT * FROM todos", [], (err, rows) => {
+      db.all('SELECT * FROM todos', [], (err, rows) => {
         if (err) {
           res.status(500).json({ error: err.message });
           return;
@@ -18,13 +18,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         res.status(400).json({ error: 'Title is required' });
         return;
       }
-      db.run("INSERT INTO todos (title, completed) VALUES (?, ?)", [title, false], function(err) {
-        if (err) {
-          res.status(500).json({ error: err.message });
-          return;
-        }
-        res.status(201).json({ id: this.lastID, title, completed: false });
-      });
+      db.run(
+        'INSERT INTO todos (title, completed) VALUES (?, ?)',
+        [title, false],
+        function (err) {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          res.status(201).json({ id: this.lastID, title, completed: false });
+        },
+      );
       break;
     }
     default:

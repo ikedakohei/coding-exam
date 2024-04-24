@@ -12,11 +12,11 @@ const mockResponse = () => {
 };
 describe('/api/todos', () => {
   it('should return 200 and an array of todos', async () => {
-    const req = {method:"GET"} as NextApiRequest;
+    const req = { method: 'GET' } as NextApiRequest;
     const res = mockResponse();
 
     await handler(req, res);
-    
+
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(expect.any(Array));
   });
