@@ -1,4 +1,4 @@
-import Todos from '@/components/todos';
+import Todos from '@/components/Todos';
 import Head from 'next/head';
 
 export default function Home() {
