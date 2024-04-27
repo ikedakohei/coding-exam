@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-
 import { base } from '@/const/base';
 import type { Todo } from '@/types/todo';
+import { useQuery } from '@tanstack/react-query';
 
 const getTodos = async (): Promise<Todo[]> => {
   const res = await fetch(`${base.url}/todos`);
@@ -9,11 +8,7 @@ const getTodos = async (): Promise<Todo[]> => {
 };
 
 export default function Todos() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    getTodos().then((data) => setTodos(data));
-  }, []);
+  const { data: todos } = useQuery({ queryKey: ['todos'], queryFn: getTodos });
 
   return (
     <div className="space-y-2">

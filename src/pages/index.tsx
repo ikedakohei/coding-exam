@@ -1,3 +1,4 @@
+import PostTodo from '@/components/PostTodo';
 import Todos from '@/components/Todos';
 import Head from 'next/head';
 
@@ -12,7 +13,10 @@ export default function Home() {
       </Head>
       <main className="max-w-xl mx-auto p-8">
         <h1 className="text-2xl font-bold text-center mb-8">TODO アプリ</h1>
-        <Todos />
+        <div className="space-y-2">
+          <PostTodo />
+          <Todos />
+        </div>
       </main>
     </>
   );
