@@ -35,3 +35,12 @@ export const updateTodo = async ({
   });
   return res.json();
 };
+
+export const deleteTodo = async ({
+  id,
+}: { id: number }): Promise<{ message?: string; error?: string }> => {
+  const res = await fetch(`${base.url}/todos/${id}`, {
+    method: 'DELETE',
+  });
+  return res.json();
+};

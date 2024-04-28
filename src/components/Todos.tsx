@@ -1,8 +1,8 @@
-import { getTodos, updateTodo } from '@/api/todo';
+import { deleteTodo, getTodos, updateTodo } from '@/api/todo';
 import Loading from '@/components/Loading';
 import TodoForm from '@/components/TodoForm';
 import type { Todo } from '@/types/todo';
-import { PencilSquareIcon } from '@heroicons/react/16/solid';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -25,6 +25,17 @@ export default function Todos() {
         return;
       }
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
+  });
+  const deleteTodoMutation = useMutation({
+    mutationFn: deleteTodo,
+    onSuccess: (data) => {
+      if ('error' in data) {
+        toast.error(data.error);
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+      toast.success('タスクを削除しました');
     },
   });
 
@@ -79,6 +90,17 @@ export default function Todos() {
                     }}
                   >
                     <PencilSquareIcon className="text-indigo-600 h-5 w-5" />
+                  </button>
+                </div>
+                <div>
+                  <div className="text-center text-xs text-gray-500">削除</div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      deleteTodoMutation.mutate({ id: todo.id });
+                    }}
+                  >
+                    <TrashIcon className="text-red-500 h-5 w-5" />
                   </button>
                 </div>
               </div>
