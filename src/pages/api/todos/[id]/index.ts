@@ -58,7 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           return;
         }
         if (this.changes === 0) {
-          res.status(404).json({ message: 'No todo found with that ID' });
+          res.status(404).json({ error: 'No todo found with that ID' });
         }
         res.status(200).json({ message: 'Todo deleted' });
       });
