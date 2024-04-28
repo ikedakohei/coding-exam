@@ -22,13 +22,16 @@ export const createTodo = async ({
 export const updateTodo = async ({
   id,
   title,
-}: { id: number; title: string }): Promise<Todo | { error: string }> => {
+  completed,
+}: { id: number; title?: string; completed?: boolean }): Promise<
+  Todo | { error: string }
+> => {
   const res = await fetch(`${base.url}/todos/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, completed }),
   });
   return res.json();
 };

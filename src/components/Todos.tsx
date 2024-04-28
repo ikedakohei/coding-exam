@@ -1,10 +1,11 @@
-import { getTodos } from '@/api/todo';
+import { getTodos, updateTodo } from '@/api/todo';
 import Loading from '@/components/Loading';
 import TodoForm from '@/components/TodoForm';
 import type { Todo } from '@/types/todo';
 import { PencilSquareIcon } from '@heroicons/react/16/solid';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Todos() {
   const { data: todos, isLoading } = useQuery({
@@ -14,6 +15,18 @@ export default function Todos() {
 
   const [open, setOpen] = useState(false);
   const [editableTodo, setEditableTodo] = useState<Todo>();
+
+  const queryClient = useQueryClient();
+  const updateTodoMutation = useMutation({
+    mutationFn: updateTodo,
+    onSuccess: (data) => {
+      if ('error' in data) {
+        toast.error(data.error);
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
+  });
 
   if (isLoading)
     return (
@@ -47,7 +60,13 @@ export default function Todos() {
                     aria-describedby="comments-description"
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    defaultChecked={todo.completed}
+                    checked={todo.completed}
+                    onChange={(e) => {
+                      updateTodoMutation.mutate({
+                        id: todo.id,
+                        completed: e.target.checked,
+                      });
+                    }}
                   />
                 </div>
                 <div>
